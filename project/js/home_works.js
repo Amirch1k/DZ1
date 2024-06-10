@@ -17,16 +17,60 @@ gmailButton.onclick = () => {
 
 
 
-const child = document.querySelector('.child_block');
-let position = 0;
 
-function moveRight() {
-    position++;
-    if (position <= 448) {
-        child.style.left = position + 'px';
-        setTimeout(moveRight, 10);
+const parentBlock = document.querySelector('.parent_block');
+const childBlock = document.querySelector('.child_block');
+
+let positionX = 0, positionY = 0;
+const offsetParentWidth = parentBlock.offsetWidth - childBlock.offsetWidth;
+const offsetParentHeight = parentBlock.offsetHeight - childBlock.offsetHeight;
+
+const moveBlock = () => {
+    if (positionX < offsetParentWidth && positionY === 0) {
+        positionX++;
+        childBlock.style.left = `${positionX}px`;
+    } else if (positionX >= offsetParentWidth && positionY < offsetParentHeight) {
+        positionY++;
+        childBlock.style.top = `${positionY}px`;
+    } else if (positionX > 0 && positionY === offsetParentHeight) {
+        positionX--;
+        childBlock.style.left = `${positionX}px`;
+    } else if (positionX === 0 && positionY > 0) {
+        positionY--;
+        childBlock.style.top = `${positionY}px`;
     }
-}
+    requestAnimationFrame(moveBlock);
+};
 
-moveRight();
+moveBlock();
+
+
+
+const seconds = document.querySelector('#seconds');
+const startBtn = document.querySelector("#start")
+const stopBtn = document.querySelector("#stop")
+const resetBtn = document.querySelector("#reset")
+
+
+let sec = 0
+let interval;
+const startTimer = () => {
+    sec++
+    seconds.innerHTML = sec
+
+}
+startBtn.addEventListener('click', () => {
+    clearInterval(interval)
+    interval = setInterval(startTimer,500)
+})
+
+stopBtn.addEventListener('click', () => {
+    clearInterval(interval)
+})
+
+resetBtn.addEventListener('click', () => {
+    clearInterval(interval)
+    sec = 0
+    seconds.innerHTML = '0'
+})
 
